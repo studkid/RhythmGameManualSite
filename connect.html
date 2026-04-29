@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Rhythm Game Client</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="connect.js"></script>
+</head>
+
+<body>
+    <label for="hostname">Address</label>
+    <input type="text" id="hostname" name="hostname" value="archipelago.gg"><br>
+    <label for="port">Port</label>
+    <input type="text" id="port" name="port" value=""><br>
+    <label for="slot">Slot</label>
+    <input type="text" id="slot" name="slot" value=""><br>
+    <label for="password">Password</label>
+    <input type="text" id="password" name="password" value=""><br>
+    <select name="game" id="game">
+        <option value="Chunithm">Chunithm</option>
+        <option value="Maimai DX">Maimai DX</option>
+    </select><br>
+    <button id="connect" onclick="connect()">Connect</button>
+</body>
+</html>

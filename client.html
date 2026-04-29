@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Rhythm Game Client</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <table>
+        <td>
+            <tr>
+                <div id="log"></div>
+            </tr>
+            <tr>
+                <label for="chat">Chat</label>
+                <input type="text" id="hostname" name="chat" value="" style="width: 100%;"><br>
+            </tr>
+            <tr>
+                <div>
+                    <p id="tracker"></p>
+                    <button disabled="true" id="goal">Goal</button>
+                </div>
+            </tr>
+            <tr>
+                <div id="locations"></div>
+            </tr>
+        </td>
+    </table>
+
+    <script type="module" src="client.js"></script>
+</body>
+</html>
