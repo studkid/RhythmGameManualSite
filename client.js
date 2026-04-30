@@ -16,6 +16,7 @@ let mapProgress = 0;
 let songs = [];
 let goalButton = null;
 let songData = null
+let lastSort = 0;
 
 const connectionOptions = {
     items: itemsHandlingFlags.all,
@@ -29,6 +30,10 @@ const connectionOptions = {
         build: 7,
     }
 }
+
+document.getElementById("sortName").onclick = function() {sortLocTable(0)};
+document.getElementById("sortVer").onclick = function() {sortLocTable(1)};
+document.getElementById("sortCat").onclick = function() {sortLocTable(2)};
 
 getSongData();
 
@@ -64,6 +69,8 @@ client.socket.on("connected", async (content) => {
             locations.appendChild(createSongEntry(song));
         }
     });
+
+    sortLocTable(0);
 });
 
 client.items.on("itemsReceived", (content) => {
@@ -88,8 +95,10 @@ function recieveItems(items) {
         const button = songEntries[item.name];
         songs.push(item.name);
         if(button != null) {
-            button.disabled = false;
+            button.getElementsByTagName("Button")[0].disabled = false;
         }
+
+        sortLocTable(lastSort);
     });
 }
 
@@ -104,10 +113,10 @@ function createSongEntry(song) {
     const categorytd = document.createElement("td");
     const difficultiestd = document.createElement("td");
 
-    buttontd.id = "locTable";
-    versiontd.id = "locTable";
-    categorytd.id = "locTable";
-    difficultiestd.id = "locTable";
+    buttontd.id = "locEntry";
+    versiontd.id = "locEntry";
+    categorytd.id = "locEntry";
+    difficultiestd.id = "locEntry";
 
     button.innerText = song;
     button.disabled = !songs.includes(song);
@@ -176,6 +185,52 @@ function getDiffString(diffArray) {
     });
 
     return diffString.substring(0, diffString.length - 2);
+}
+
+function sortLocTable(sortBy) {
+    console.log("Sorting!")
+    var table = document.getElementById("locations");
+    var sorting = true;
+    var x, y, i, xDisabled, yDisabled
+
+    while(sorting) {
+        sorting = false;
+        var rows = table.rows;
+
+        for(i = 1; i < (rows.length - 1); i++) {
+            var shouldSwitch = false;
+            
+            if(rows[i].id == "goalEntry") {
+                continue;
+            }
+
+            x = rows[i].getElementsByTagName("TD")[sortBy];
+            xDisabled = rows[i].getElementsByTagName("TD")[0].getElementsByTagName("Button")[0].disabled;
+            y = rows[i + 1].getElementsByTagName("TD")[sortBy];
+            yDisabled = rows[i + 1].getElementsByTagName("TD")[0].getElementsByTagName("Button")[0].disabled;
+
+            if(xDisabled && !yDisabled) {
+                shouldSwitch = true;
+                break;
+            }
+
+            if(yDisabled && !xDisabled) {
+                continue;
+            }
+
+            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                shouldSwitch = true;
+                break;
+            }
+        }
+
+        if(shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            sorting = true;
+        } 
+    }
+
+    lastSort = sortBy;
 }
 
 await client.login(hostname, slot, game, connectionOptions)
