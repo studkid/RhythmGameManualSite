@@ -41,6 +41,7 @@ client.messages.on("message", (content) => {
     console.log(content);
     const logBox = document.getElementById("log");
     logBox.textContent = `${logBox.textContent}\n${content}`;
+    logBox.scrollTop = logBox.scrollHeight;
 });
 
 client.socket.on("connected", async (content) => {
@@ -188,7 +189,6 @@ function getDiffString(diffArray) {
 }
 
 function sortLocTable(sortBy) {
-    console.log("Sorting!")
     var table = document.getElementById("locations");
     var sorting = true;
     var x, y, i, xDisabled, yDisabled
@@ -232,6 +232,14 @@ function sortLocTable(sortBy) {
 
     lastSort = sortBy;
 }
+
+const chat = document.getElementById("chat");
+chat.addEventListener('keydown', (event) => {
+    if(event.key == "Enter") {
+        client.messages.say(event.currentTarget.value);
+        event.currentTarget.value = "";
+    }
+});
 
 await client.login(hostname, slot, game, connectionOptions)
     .then((value) => slotData = value)
