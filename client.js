@@ -10,7 +10,7 @@ const slot = sessionStorage.getItem("slot");
 const game = sessionStorage.getItem("game");
 
 let slotData = null;
-let buttons = {};
+let songEntries = {};
 let locationTable = null;
 let mapProgress = 0;
 let songs = [];
@@ -85,7 +85,7 @@ function recieveItems(items) {
             return;
         }
 
-        const button = buttons[item.name];
+        const button = songEntries[item.name];
         songs.push(item.name);
         if(button != null) {
             button.disabled = false;
@@ -112,7 +112,6 @@ function createSongEntry(song) {
     button.innerText = song;
     button.disabled = !songs.includes(song);
     button.onclick = function(){sendLocation(song)};
-    buttons[song] = button;
     buttontd.appendChild(button);
     tr.appendChild(buttontd);
 
@@ -128,6 +127,7 @@ function createSongEntry(song) {
     tr.appendChild(versiontd);
     tr.appendChild(categorytd);
     tr.appendChild(difficultiestd);
+    songEntries[song] = tr;
     return tr;
 }
 
@@ -137,7 +137,7 @@ async function sendLocation(name) {
     const locId = locationTable[`${name}-0`]
     console.log(`Sending ${name}: ${locId}`);
     await client.check(locId, locId + 1);
-    buttons[name].remove();
+    songEntries[name].remove();
 }
 
 function goalGame() {
