@@ -1,0 +1,19 @@
+.locTable {
+    width: 25%;
+    text-align: center;
+    border: 1px solid;
+}
+
+#locTable {
+    width: 25%;
+    text-align: center;
+    border: 1px solid;
+}
+
+button {
+    width: 100%;
+}
+
+p {
+    text-align: center;
+}

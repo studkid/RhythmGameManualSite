@@ -15,6 +15,7 @@ let locationTable = null;
 let mapProgress = 0;
 let songs = [];
 let goalButton = null;
+let songData = null
 
 const connectionOptions = {
     items: itemsHandlingFlags.all,
@@ -29,9 +30,12 @@ const connectionOptions = {
     }
 }
 
+getSongData();
+
 client.messages.on("message", (content) => {
     console.log(content);
-    document.getElementById("log").innerHTML = content
+    const logBox = document.getElementById("log");
+    logBox.textContent = `${logBox.textContent}\n${content}`;
 });
 
 client.socket.on("connected", async (content) => {
@@ -39,10 +43,15 @@ client.socket.on("connected", async (content) => {
 
     locationTable = client.package.findPackage(game).locationTable;
 
-    document.getElementById("tracker").innerHTML = `${mapProgress} / ${slotData.sheetWinCount} Map Progress to Goal.`;
+    document.getElementById("tracker").innerText = `${mapProgress} / ${slotData.sheetWinCount} Map Progress to Goal.`;
     goalButton = document.getElementById("goal");
     goalButton.onclick = function(){goalGame()};
     goalButton.innerText = `Goal: ${slotData.victoryLocation}`;
+    if(songData != null) {
+        document.getElementById("goalVer").innerText = songData[slotData.victoryLocation].version;
+        document.getElementById("goalCat").innerText = songData[slotData.victoryLocation].category;
+        document.getElementById("goalDiff").innerText = getDiffString(songData[slotData.victoryLocation].difficulties);
+    }
     if(mapProgress >= slotData.sheetWinCount) {
         console.log("Goal Reached!");
         goalButton.disabled = false;
@@ -52,12 +61,7 @@ client.socket.on("connected", async (content) => {
     const locations = document.getElementById("locations")
     slotData.finalSongIDs.forEach((song) => {
         if(missingLoc.includes(locationTable[`${song}-0`]) && missingLoc.includes(locationTable[`${song}-1`])) {
-            const button = document.createElement("button");
-            button.innerText = song;
-            button.disabled = !songs.includes(song);
-            button.onclick = function(){sendLocation(song)};
-            buttons[song] = button;
-            locations.appendChild(button)
+            locations.appendChild(createSongEntry(song));
         }
     });
 });
@@ -89,6 +93,44 @@ function recieveItems(items) {
     });
 }
 
+function createSongEntry(song) {
+    const tr = document.createElement("tr");
+    const button = document.createElement("button");
+    const buttontd = document.createElement("td");
+    const version = document.createElement("p");
+    const category = document.createElement("p");
+    const difficulties = document.createElement("p");
+    const versiontd = document.createElement("td");
+    const categorytd = document.createElement("td");
+    const difficultiestd = document.createElement("td");
+
+    buttontd.id = "locTable";
+    versiontd.id = "locTable";
+    categorytd.id = "locTable";
+    difficultiestd.id = "locTable";
+
+    button.innerText = song;
+    button.disabled = !songs.includes(song);
+    button.onclick = function(){sendLocation(song)};
+    buttons[song] = button;
+    buttontd.appendChild(button);
+    tr.appendChild(buttontd);
+
+    if(songData != null) {
+        version.innerText = songData[song].version;
+        versiontd.appendChild(version);
+        category.innerText = songData[song].category;
+        categorytd.appendChild(category);
+        difficulties.innerText = getDiffString(songData[song].difficulties);
+        difficultiestd.appendChild(difficulties);
+    }
+
+    tr.appendChild(versiontd);
+    tr.appendChild(categorytd);
+    tr.appendChild(difficultiestd);
+    return tr;
+}
+
 async function sendLocation(name) {
     if(locationTable == null) return;
 
@@ -100,6 +142,40 @@ async function sendLocation(name) {
 
 function goalGame() {
     client.goal();
+}
+
+function getSongData() {
+    fetch('./data/chuniSongData.json')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();  
+    })
+    .then(data => songData = data)  
+    .catch(error => console.error('Failed to fetch data:', error));
+}
+
+function getDiffString(diffArray) {
+    let diffString = "";
+
+    diffArray.forEach((diff) => {
+        let modifiedDiff = "";
+
+        if(diff == null) {
+            return;
+        }
+        else if(diff % 1 > .5) {
+            modifiedDiff = `${Math.floor(diff)}+`;
+        }
+        else {
+            modifiedDiff = Math.floor(diff);
+        }
+
+        diffString = `${diffString}${modifiedDiff}, `
+    });
+
+    return diffString.substring(0, diffString.length - 2);
 }
 
 await client.login(hostname, slot, game, connectionOptions)

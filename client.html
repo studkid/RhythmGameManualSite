@@ -4,28 +4,39 @@
     <meta charset="UTF-8">
     <title>Rhythm Game Client</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="client.css">
 </head>
 
 <body>
-    <table>
-        <td>
-            <tr>
-                <div id="log"></div>
-            </tr>
-            <tr>
+    <table style="width: 100%;">
+        <tr>
+            <td><textarea id="log" disabled="true" rows="15" style="width: 100%; resize: vertical;"></textarea></td>
+        </tr>
+        <tr>
+            <td>
                 <label for="chat">Chat</label>
                 <input type="text" id="hostname" name="chat" value="" style="width: 100%;"><br>
+                <p id="tracker">X/Y Map Progress to Goal</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <table id="locations" style="width: 100%; border: 1px solid;">
+            <tr style="width: 100%;">
+                <th>Name</th>
+                <th>Version</th>
+                <th>Category</th>
+                <th>Difficulties</th>
             </tr>
             <tr>
-                <div>
-                    <p id="tracker"></p>
-                    <button disabled="true" id="goal">Goal</button>
-                </div>
+                <td class="locTable"><button disabled="true" id="goal" style="width: 100%;">Goal</button></td>
+                <td class="locTable" id="goalVer"></td>
+                <td class="locTable" id="goalCat"></td>
+                <td class="locTable" id="goalDiff"></td>
             </tr>
-            <tr>
-                <div id="locations"></div>
-            </tr>
-        </td>
+            </td>
+        </table>
+        </tr>
     </table>
 
     <script type="module" src="client.js"></script>
