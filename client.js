@@ -35,7 +35,7 @@ document.getElementById("sortName").onclick = function() {sortLocTable(0)};
 document.getElementById("sortVer").onclick = function() {sortLocTable(1)};
 document.getElementById("sortCat").onclick = function() {sortLocTable(2)};
 
-getSongData();
+getSongData(game);
 
 client.messages.on("message", (content) => {
     console.log(content);
@@ -154,8 +154,17 @@ function goalGame() {
     client.goal();
 }
 
-function getSongData() {
-    fetch('./data/chuniSongData.json')
+function getSongData(game) {
+    let json
+
+    if(game == "Chunithm") {
+        json = './data/chuniSongData.json'
+    }
+    else if(game == "Maimai DX") {
+        json = './data/maiSongData.json'
+    }
+
+    fetch(json)
     .then(response => {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
