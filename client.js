@@ -12,7 +12,7 @@ const game = sessionStorage.getItem("game");
 let slotData = null;
 let songEntries = {};
 let locationTable = null;
-let mapProgress = 0;
+let curSheetCount = 0;
 let songs = [];
 let goalButton = null;
 let songData = null
@@ -49,7 +49,7 @@ client.socket.on("connected", async (content) => {
 
     locationTable = client.package.findPackage(game).locationTable;
 
-    document.getElementById("tracker").innerText = `${mapProgress} / ${slotData.sheetWinCount} Map Progress to Goal.`;
+    document.getElementById("tracker").innerText = `${curSheetCount} / ${slotData.sheetWinCount} ${slotData.sheetName} to Goal.`;
     goalButton = document.getElementById("goal");
     goalButton.onclick = function(){goalGame()};
     goalButton.innerText = `Goal: ${slotData.victoryLocation}`;
@@ -58,7 +58,7 @@ client.socket.on("connected", async (content) => {
         document.getElementById("goalCat").innerText = songData[slotData.victoryLocation].category;
         document.getElementById("goalDiff").innerText = getDiffString(songData[slotData.victoryLocation].difficulties);
     }
-    if(mapProgress >= slotData.sheetWinCount) {
+    if(curSheetCount >= slotData.sheetWinCount) {
         console.log("Goal Reached!");
         goalButton.disabled = false;
     }
@@ -82,11 +82,11 @@ function recieveItems(items) {
     items.forEach((item) => {
         console.log(`Receiving: ${item.name} ${item.flags}`)
 
-        if(item.name == "Map Progress") {
-            mapProgress++;
+        if(item.name == "Map Progress" || item.name == "Maimile") {
+            curSheetCount++;
             if(slotData != null) {
-                document.getElementById("tracker").innerHTML = `${mapProgress} / ${slotData.sheetWinCount} Map Progress to Goal.`
-                if(mapProgress >= slotData.sheetWinCount) {
+                document.getElementById("tracker").innerHTML = `${curSheetCount} / ${slotData.sheetWinCount} ${slotData.sheetName} to Goal.`
+                if(curSheetCount >= slotData.sheetWinCount) {
                     goalButton.disabled = false;
                 }
             }
