@@ -184,7 +184,7 @@ function getDiffString(diffArray) {
         if(diff == null) {
             return;
         }
-        else if(diff % 1 > .5) {
+        else if(diff % 1 >= .5) {
             modifiedDiff = `${Math.floor(diff)}+`;
         }
         else {
