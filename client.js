@@ -82,7 +82,7 @@ function recieveItems(items) {
     items.forEach((item) => {
         console.log(`Receiving: ${item.name} ${item.flags}`)
 
-        if(item.name == "Map Progress" || item.name == "Maimile") {
+        if(item.name == "Map Progress" || item.name == "Maimile" || item.name == "Reverse Point") {
             curSheetCount++;
             if(slotData != null) {
                 document.getElementById("tracker").innerHTML = `${curSheetCount} / ${slotData.sheetWinCount} ${slotData.sheetName} to Goal.`
@@ -162,6 +162,9 @@ function getSongData(game) {
     }
     else if(game == "Maimai DX") {
         json = './data/maiSongData.json'
+    }
+    else if(game == "Wacca") {
+        json = './data/waccaSongData.json'
     }
 
     fetch(json)
