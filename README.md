@@ -12,6 +12,7 @@ If you sort the table by song name, version or category by clicking the respecti
 # Currently Supported Games
 - Chunithm (up to X-Verse-X)
 - Maimai DX (up to CiRCLE PLUS)
+- Wacca (Up to Plus)
 
 # FAQ
 ## Can I still use the ap manual client for these worlds?
@@ -36,3 +37,4 @@ Well, it is a manual so you can always just say you did click the button.  Nobod
 
 # Data Sources
 - [Zetaraku's Arcade Songs Datasources](https://github.com/zetaraku/arcade-songs)
+- [Wacca Plus](https://github.com/Stabyourself/mithical/blob/master/assets/wacca/waccaSongsPlus.js)
