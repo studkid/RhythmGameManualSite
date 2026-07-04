@@ -17,6 +17,8 @@ let songs = [];
 let goalButton = null;
 let songData = null
 let lastSort = 0;
+let plusDiff = 0.5;
+let showIntLevel = false;
 
 const connectionOptions = {
     items: itemsHandlingFlags.all,
@@ -158,13 +160,16 @@ function getSongData(game) {
     let json
 
     if(game == "Chunithm") {
-        json = './data/chuniSongData.json'
+        json = './data/chuniSongData.json';
+        plusDiff = 0.5;
     }
     else if(game == "Maimai DX") {
-        json = './data/maiSongData.json'
+        json = './data/maiSongData.json';
+        plusDiff = 0.6;
     }
     else if(game == "Wacca") {
-        json = './data/waccaSongData.json'
+        json = './data/waccaSongData.json';
+        plusDiff = 0.7;
     }
 
     fetch(json)
@@ -182,15 +187,15 @@ function getDiffString(diffArray) {
     let diffString = "";
 
     diffArray.forEach((diff) => {
-        let modifiedDiff = "";
+        let modifiedDiff = diff;
 
         if(diff == null) {
             return;
         }
-        else if(diff % 1 >= .5) {
+        else if(!showIntLevel && ((diff * 100) % 100) >= plusDiff * 100) {
             modifiedDiff = `${Math.floor(diff)}+`;
         }
-        else {
+        else if(!showIntLevel) {
             modifiedDiff = Math.floor(diff);
         }
 
@@ -245,12 +250,42 @@ function sortLocTable(sortBy) {
     lastSort = sortBy;
 }
 
+function toggleIntDiff() {
+    var table = document.getElementById("locations");
+    var rows = table.rows;
+
+    if(showIntLevel) {
+        showIntLevel = false;
+    }
+    else {
+        showIntLevel = true;
+    }
+
+    for(var i = 1; i < (rows.length - 1); i++) {
+        var row = rows[i];
+        var song = row.getElementsByTagName("TD")[0];
+        var difficulty = row.getElementsByTagName("TD")[3];
+        var songName = song.innerText;
+
+        if(row.id == "goalEntry") {
+            songName = song.innerText.substring(6);
+        }
+        
+        difficulty.innerText = getDiffString(songData[songName].difficulties);
+    }
+}
+
 const chat = document.getElementById("chat");
 chat.addEventListener('keydown', (event) => {
     if(event.key == "Enter") {
         client.messages.say(event.currentTarget.value);
         event.currentTarget.value = "";
     }
+});
+
+const levelToggle = document.getElementById("levelToggle");
+levelToggle.addEventListener('click', (event) => {
+    toggleIntDiff();
 });
 
 await client.login(hostname, slot, game, connectionOptions)

@@ -21,21 +21,23 @@
         </tr>
         <tr>
             <td>
-            <table id="locations" style="width: 100%; border: 1px solid;">
-            <tr style="width: 100%;">
-                <th id="sortName">Name</th>
-                <th id="sortVer">Version</th>
-                <th id="sortCat">Category</th>
-                <th>Difficulties</th>
-            </tr>
-            <tr id="goalEntry">
-                <td class="locEntry"><button disabled="true" id="goal" style="width: 100%;">Goal</button></td>
-                <td class="locEntry" id="goalVer"></td>
-                <td class="locEntry" id="goalCat"></td>
-                <td class="locEntry" id="goalDiff"></td>
-            </tr>
+                <input type="checkbox" id="levelToggle" name="intLevel">
+                <label for="intLevel">Toggle Internal Level</label>
+                <table id="locations" style="width: 100%; border: 1px solid;">
+                    <tr style="width: 100%;">
+                        <th id="sortName">Name</th>
+                        <th id="sortVer">Version</th>
+                        <th id="sortCat">Category</th>
+                        <th>Difficulties</th>
+                    </tr>
+                    <tr id="goalEntry">
+                        <td class="locEntry"><button disabled="true" id="goal" style="width: 100%;">Goal</button></td>
+                        <td class="locEntry" id="goalVer"></td>
+                        <td class="locEntry" id="goalCat"></td>
+                        <td class="locEntry" id="goalDiff"></td>
+                    </tr>
+                </table>
             </td>
-        </table>
         </tr>
     </table>
 
